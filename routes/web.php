@@ -13,14 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('starting_page');
-});
-
-Route::get('/info', function () {
-    return view('info');
-});
-
 Auth::routes();
+
+Route::get('/', function () {
+    if (Auth::check()) {
+        return Redirect::to('home');
+    } else {
+        return Redirect::to('login');
+    }
+});
+
+Route::get('locale/{locale}', function ($locale){
+    Session::put('locale', $locale);
+    return redirect()->back();
+});
 
 Route::get('/home', 'HomeController@index')->name('home');
